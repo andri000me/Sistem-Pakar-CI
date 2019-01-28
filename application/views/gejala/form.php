@@ -14,7 +14,7 @@
             <?= form_label('Kode Gejala', 'kode_gejala', ['class' => 'label']) ?>
         </div>
         <div class="col-4">
-            <?= form_input('kode_gejala', $input->kd_gejala) ?>
+            <?= form_input(array('name'=>'kode_gejala', 'value'=>$input->kd_gejala, 'disabled'=>'true')) ?>
         </div>
         <div class="col-4">
             <?= form_error('kode_gejala') ?>

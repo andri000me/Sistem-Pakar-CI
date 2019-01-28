@@ -10,11 +10,10 @@ class Gejala extends Operator_Controller
 
     public function index($page = null)
     {
-        $gejalaa     = $this->gejala->orderBy('id')->getAll();
-        $jumlah     = count($gejalaa);
+        $gejalaa     = $this->gejala->getAll();                                         //nama gejala ambil dari model
         $halaman    = $this->halaman;
         $main_view  = 'gejala/index';
-        $this->load->view('template', compact('halaman', 'main_view', 'gejalaa', 'jumlah'));
+        $this->load->view('template', compact('halaman', 'main_view', 'gejalaa'));
     }
 
     public function create()
@@ -27,8 +26,8 @@ class Gejala extends Operator_Controller
 
         if (!$this->gejala->validate()) {
             $halaman     = $this->halaman;
-            $main_view   = 'gejala/form';
-            $form_action = 'gejala/create';
+            $main_view   = 'gejala/form_new';                                           //nama gejala ambil dari folder view
+            $form_action = 'gejala/create';                                             //nama gejala ambil dari controller
 
             $this->load->view('template', compact('halaman', 'main_view', 'form_action', 'input'));
             return;
@@ -52,7 +51,7 @@ class Gejala extends Operator_Controller
         }
 
         if (!$_POST) {
-            $input = (object) $gejala;
+            $input = (object) $gejala;                                                //mengambil data hasil select dan menampilkan object
         } else {
             $input = (object) $this->input->post(null, true);
         }

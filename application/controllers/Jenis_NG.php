@@ -1,128 +1,96 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Siswa extends Operator_Controller
+class Jenis_NG extends Operator_Controller
 {
 	public function __construct()
     {
         parent::__construct();
-        $this->halaman = 'siswa';
+        $this->halaman = 'jenis_ng';
     }
 
 	public function index($page = null)
 	{
-        $jenisng     = $this->siswa->orderBy('id')->getAll();
-        $jumlah     = count($jenisng);
+        $jenisng    = $this->jenis_ng->getAll();                                     //jenis_ng berasal dari model
         $halaman    = $this->halaman;
-        $main_view  = 'siswa/index';
-        $pagination = $this->siswa->makePagination(site_url('siswa'), 2, $jumlah);
+        $main_view  = 'jenisng/index';
 
-		$this->load->view('template', compact('halaman', 'main_view', 'jenisng', 'pagination', 'jumlah'));
+        $this->load->view('template', compact('halaman', 'main_view', 'jenisng'));
 	}
 
 	public function create()
 	{
         if (!$_POST) {
-            $input = (object) $this->siswa->getDefaultValues();
+            $input = (object) $this->jenis_ng->getDefaultValues();                  
         } else {
             $input = (object) $this->input->post(null, true);
         }
 
-        if (!$this->siswa->validate()) {
+        if (!$this->jenis_ng->validate()) {
             $halaman     = $this->halaman;
-            $main_view   = 'siswa/form_new';
-            $form_action = 'siswa/create';
+            $main_view   = 'jenisng/form_new';                                      //jenisng berasal dari folder view
+            $form_action = 'jenis_ng/create';                                       //jenis_ng berasal dari nama controller
 
             $this->load->view('template', compact('halaman', 'main_view', 'form_action', 'input'));
             return;
         }
 
-        if ($this->siswa->insert($input)) {
+        if ($this->jenis_ng->insert($input)) {
             $this->session->set_flashdata('success', 'Data siswa berhasil disimpan.');
         } else {
             $this->session->set_flashdata('error', 'Data siswa gagal disimpan.');
         }
 
-        redirect('siswa');
+        redirect('jenis_ng');
 	}
 
 	public function edit($id = null)
 	{
-        $siswa = $this->siswa->where('id', $id)->get();
-        if (!$siswa) {
+        $jenisng = $this->jenis_ng->where('id', $id)->get();
+        if (!$jenisng) {                                                                    
             $this->session->set_flashdata('warning', 'Data siswa tidak ada.');
-            redirect('siswa');
+            redirect('jenis_ng');
         }
 
         if (!$_POST) {
-            $input = (object) $siswa;
+            $input = (object) $jenisng;                                               //mengambil data hasil select dan menampilkan object
         } else {
             $input = (object) $this->input->post(null, true);
         }
 
-        if (!$this->siswa->validate()) {
+        if (!$this->jenis_ng->validate()) {
             $halaman     = $this->halaman;
-            $main_view   = 'siswa/form';
-            $form_action = "siswa/edit/$id";
+            $main_view   = 'jenisng/form';
+            $form_action = "jenis_ng/edit/$id";
 
             $this->load->view('template', compact('halaman', 'main_view', 'form_action', 'input'));
             return;
         }
 
-        if ($this->siswa->where('id', $id)->update($input)) {
+        if ($this->jenis_ng->where('id', $id)->update($input)) {
             $this->session->set_flashdata('success', 'Data siswa berhasil diupdate.');
         } else {
             $this->session->set_flashdata('error', 'Data siswa gagal diupdate.');
         }
 
-        redirect('siswa');
+        redirect('jenis_ng');
 	}
 
 	public function delete($id = null)
 	{
-		$siswa = $this->siswa->where('id', $id)->get();
-        if (!$siswa) {
+		$jenis_ng = $this->jenis_ng->where('id', $id)->get();
+        if (!$jenis_ng) {
             $this->session->set_flashdata('warning', 'Data siswa tidak ada.');
-            redirect('siswa');
+            redirect('jenis_ng');
         }
 
-        if ($this->siswa->where('id', $id)->delete()) {
+        if ($this->jenis_ng->where('id', $id)->delete()) {
 			$this->session->set_flashdata('success', 'Data siswa berhasil dihapus.');
 		} else {
             $this->session->set_flashdata('error', 'Data siswa gagal dihapus.');
         }
 
-		redirect('siswa');
+		redirect('jenis_ng');
 	}
-
-    public function search($page = null)
-    {
-        $keywords   = $this->input->get('keywords', true);
-        $jenisng     = $this->siswa->where('nis', $keywords)
-                                  ->orLike('nama_siswa', $keywords)
-                                  ->join('kelas')
-                                  ->orderBy('kelas.id_kelas')
-                                  ->orderBy('nama_siswa')
-                                  ->paginate($page)
-                                  ->getAll();
-        $jml        = $this->siswa->where('nis', $keywords)
-                                  ->orLike('nama_siswa', $keywords)
-                                  ->join('kelas')
-                                  ->orderBy('kelas.id_kelas')
-                                  ->orderBy('nama_siswa')
-                                  ->getAll();
-        $jumlah = count($jml);
-
-        $pagination = $this->siswa->makePagination(site_url('siswa/search/'), 3, $jumlah);
-
-        if (!$jenisng) {
-            $this->session->set_flashdata('warning', 'Data tidak ditemukan.');
-            redirect('siswa');
-        }
-
-        $halaman    = $this->halaman;
-        $main_view  = 'siswa/index';
-        $this->load->view('template', compact('halaman', 'main_view', 'jenisng', 'pagination', 'jumlah'));
-    }
 
     /*
     |-----------------------------------------------------------------

@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.14
--- http://www.phpmyadmin.net
+-- version 4.8.2
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2019 at 11:17 AM
--- Server version: 5.6.26
--- PHP Version: 5.6.12
+-- Generation Time: Jan 28, 2019 at 05:59 AM
+-- Server version: 10.1.34-MariaDB
+-- PHP Version: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -26,12 +28,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `buku`
 --
 
-CREATE TABLE IF NOT EXISTS `buku` (
-  `id_buku` int(10) unsigned NOT NULL,
+CREATE TABLE `buku` (
+  `id_buku` int(10) UNSIGNED NOT NULL,
   `kode_buku` varchar(10) NOT NULL,
-  `id_judul` int(10) unsigned NOT NULL,
+  `id_judul` int(10) UNSIGNED NOT NULL,
   `is_ada` enum('y','n') NOT NULL DEFAULT 'y'
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `buku`
@@ -88,9 +90,9 @@ INSERT INTO `buku` (`id_buku`, `kode_buku`, `id_judul`, `is_ada`) VALUES
 -- Table structure for table `denda`
 --
 
-CREATE TABLE IF NOT EXISTS `denda` (
-  `id_pinjam` int(10) unsigned NOT NULL,
-  `jumlah` int(10) unsigned NOT NULL,
+CREATE TABLE `denda` (
+  `id_pinjam` int(10) UNSIGNED NOT NULL,
+  `jumlah` int(10) UNSIGNED NOT NULL,
   `tanggal_pembayaran` date NOT NULL,
   `is_dibayar` enum('y','n') NOT NULL DEFAULT 'n'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -98,17 +100,66 @@ CREATE TABLE IF NOT EXISTS `denda` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `gejala`
+--
+
+CREATE TABLE `gejala` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `kd_gejala` varchar(3) NOT NULL,
+  `nama_gejala` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `gejala`
+--
+
+INSERT INTO `gejala` (`id`, `kd_gejala`, `nama_gejala`) VALUES
+(1, 'G01', 'Material hitam pekat'),
+(2, 'G02', 'Material berdebu tebal'),
+(3, 'G03', 'Material berdebu tipis'),
+(4, 'G04', 'Suhu terlalu panas'),
+(5, 'G05', 'Level chemical tidak standar'),
+(6, 'G06', 'Material kasar');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jenis_ng`
+--
+
+CREATE TABLE `jenis_ng` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `kd_NG` varchar(4) NOT NULL,
+  `jenis_NG` varchar(20) NOT NULL,
+  `definisi` varchar(255) NOT NULL,
+  `solusi` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `jenis_ng`
+--
+
+INSERT INTO `jenis_ng` (`id`, `kd_NG`, `jenis_NG`, `definisi`, `solusi`) VALUES
+(1, 'S01', 'Retak', 'material memiliki retakan dikarenakan kualitas bonde masih keras dan kasar', 'tambah waktu bonde.'),
+(2, 'S02', 'Dies pecah', 'dies pecah dikarenakan material lebih keras dibandingkan dengan dies.', 'periksa level chemical bonde dan cek kehalusan debu.'),
+(3, 'S03', 'Cacat', 'terdapat bagian yang tidak OK dikarenakan material tidak terbonde sempurna.', 'bonde ulang sehingga material OK.'),
+(4, 'S04', 'Makikomi', 'makikomi atau retak pada bagian dalam diameter dikarenakan bonde yang tidak merata.', 'pisahkan material yang sudah dipress agar bagian yang memiliki lubang ikut terbonde.'),
+(5, 'S05', 'Misrun', 'misrun dikarenakan material yang sudah terbonde terjatuh ke air sehingga debu bonde hilang.', 'bonde ulang material yang terjatuh.');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `judul`
 --
 
-CREATE TABLE IF NOT EXISTS `judul` (
-  `id_judul` int(10) unsigned NOT NULL,
+CREATE TABLE `judul` (
+  `id_judul` int(10) UNSIGNED NOT NULL,
   `isbn` varchar(15) NOT NULL DEFAULT '0',
   `judul_buku` varchar(255) NOT NULL,
   `penulis` varchar(255) NOT NULL,
   `penerbit` varchar(255) NOT NULL,
   `cover` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `judul`
@@ -138,7 +189,7 @@ INSERT INTO `judul` (`id_judul`, `isbn`, `judul_buku`, `penulis`, `penerbit`, `c
 (69, '9786022515142', 'Super Jenius Fisika SMP Kelas VII, VIII, IX', 'Sienta Sasika Novel', 'Grasindo', '20160704063402.jpg'),
 (70, '9786021609088', 'Pocket Book: Matematika & Fisika SMP Kelas 1, 2 & 3', 'Tim Math Sains Eduka', 'CMedia', '20160704063339.jpg'),
 (72, '9786021609729', 'Fresh Update Mega Bank Soal Bahasa Indonesia SMP Kelas 1, 2 & 3', 'Tim Guru Eduka', 'CMedia', '20160704063217.jpg'),
-(73, '9786023040100', 'Kamus Detail Bahasa Indonesia Untuk SMP/MTs Kelas 1, 2 dan 3', 'Siti Nur''aisyah, A.md', 'Kunci Aksara', '20160704063141.jpg'),
+(73, '9786023040100', 'Kamus Detail Bahasa Indonesia Untuk SMP/MTs Kelas 1, 2 dan 3', 'Siti Nur\'aisyah, A.md', 'Kunci Aksara', '20160704063141.jpg'),
 (74, '9789792942637', 'Cara Cespleng Pintar Bahasa Indonesia SMP Kelas 7, 8, 9', 'Agus Kamaludin, Niken Umiyati', 'Andi Publisher', '20160704063112.jpg'),
 (75, '9786022416159', 'Mandiri Bahasa Indonesia untuk SMP/MTs VII', 'Tim Bahasa', 'Erlangga', '20160704063025.jpg'),
 (76, '9786028596657', 'Mega Bank Soal Bahasa Indonesia SMP Kelas 1, 2 & 3', 'Tim Guru Eduka', 'CMedia', '20160704062854.jpg'),
@@ -160,38 +211,14 @@ INSERT INTO `judul` (`id_judul`, `isbn`, `judul_buku`, `penulis`, `penerbit`, `c
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kelas`
---
-
-CREATE TABLE IF NOT EXISTS `kelas` (
-  `id` int(10) unsigned NOT NULL,
-  `kd_gejala` varchar(3) NOT NULL,
-  `nama_gejala` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `kelas`
---
-
-INSERT INTO `kelas` (`id`, `kd_gejala`, `nama_gejala`) VALUES
-(1, 'G01', 'Material hitam pekat'),
-(2, 'G02', 'Material berdebu tebal'),
-(3, 'G03', 'Material berdebu tipis'),
-(4, 'G04', 'Suhu terlalu panas'),
-(5, 'G05', 'Level chemical tidak standar'),
-(6, 'G06', 'Material kasar');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `peminjaman`
 --
 
-CREATE TABLE IF NOT EXISTS `peminjaman` (
-  `id_pinjam` int(10) unsigned NOT NULL,
+CREATE TABLE `peminjaman` (
+  `id_pinjam` int(10) UNSIGNED NOT NULL,
   `tanggal_pinjam` date NOT NULL,
-  `id_siswa` int(10) unsigned NOT NULL,
-  `id_buku` int(10) unsigned NOT NULL,
+  `id_siswa` int(10) UNSIGNED NOT NULL,
+  `id_buku` int(10) UNSIGNED NOT NULL,
   `tanggal_kembali` date DEFAULT NULL,
   `is_kembali` enum('y','n') NOT NULL DEFAULT 'n'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -202,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `peminjaman` (
 -- Table structure for table `relasi`
 --
 
-CREATE TABLE IF NOT EXISTS `relasi` (
+CREATE TABLE `relasi` (
   `id` int(11) NOT NULL,
   `kd_gejala` varchar(4) NOT NULL,
   `kd_NG` varchar(4) NOT NULL
@@ -228,42 +255,17 @@ INSERT INTO `relasi` (`id`, `kd_gejala`, `kd_NG`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `siswa`
---
-
-CREATE TABLE IF NOT EXISTS `siswa` (
-  `id` int(10) unsigned NOT NULL,
-  `kd_NG` varchar(4) NOT NULL,
-  `jenis_NG` varchar(20) NOT NULL,
-  `definisi` varchar(255) NOT NULL,
-  `solusi` varchar(250) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `siswa`
---
-
-INSERT INTO `siswa` (`id`, `kd_NG`, `jenis_NG`, `definisi`, `solusi`) VALUES
-(1, 'S01', 'Retak', 'material memiliki retakan dikarenakan kualitas bonde masih keras dan kasar', 'tambah waktu bonde.'),
-(2, 'S02', 'Dies pecah', 'dies pecah dikarenakan material lebih keras dibandingkan dengan dies.', 'periksa level chemical bonde dan cek kehalusan debu.'),
-(3, 'S03', 'Cacat', 'terdapat bagian yang tidak OK dikarenakan material tidak terbonde sempurna.', 'bonde ulang sehingga material OK.'),
-(4, 'S04', 'Makikomi', 'makikomi atau retak pada bagian dalam diameter dikarenakan bonde yang tidak merata.', 'pisahkan material yang sudah dipress agar bagian yang memiliki lubang ikut terbonde.'),
-(5, 'S05', 'Misrun', 'misrun dikarenakan material yang sudah terbonde terjatuh ke air sehingga debu bonde hilang.', 'bonde ulang material yang terjatuh.');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
-  `id_user` int(10) unsigned NOT NULL,
+CREATE TABLE `user` (
+  `id_user` int(10) UNSIGNED NOT NULL,
   `nama_user` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `level` enum('operator','admin') NOT NULL DEFAULT 'operator',
   `is_blokir` enum('y','n') NOT NULL DEFAULT 'n'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -292,17 +294,24 @@ ALTER TABLE `denda`
   ADD PRIMARY KEY (`id_pinjam`);
 
 --
+-- Indexes for table `gejala`
+--
+ALTER TABLE `gejala`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `jenis_ng`
+--
+ALTER TABLE `jenis_ng`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_nisn` (`kd_NG`);
+
+--
 -- Indexes for table `judul`
 --
 ALTER TABLE `judul`
   ADD PRIMARY KEY (`id_judul`),
   ADD UNIQUE KEY `uq_isbn` (`isbn`);
-
---
--- Indexes for table `kelas`
---
-ALTER TABLE `kelas`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `peminjaman`
@@ -319,13 +328,6 @@ ALTER TABLE `relasi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `siswa`
---
-ALTER TABLE `siswa`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_nisn` (`kd_NG`);
-
---
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -340,32 +342,38 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `buku`
 --
 ALTER TABLE `buku`
-  MODIFY `id_buku` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=44;
+  MODIFY `id_buku` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- AUTO_INCREMENT for table `gejala`
+--
+ALTER TABLE `gejala`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `jenis_ng`
+--
+ALTER TABLE `jenis_ng`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT for table `judul`
 --
 ALTER TABLE `judul`
-  MODIFY `id_judul` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=91;
---
--- AUTO_INCREMENT for table `kelas`
---
-ALTER TABLE `kelas`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `id_judul` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+
 --
 -- AUTO_INCREMENT for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id_pinjam` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `siswa`
---
-ALTER TABLE `siswa`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `id_pinjam` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id_user` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- Constraints for dumped tables
 --
@@ -381,6 +389,7 @@ ALTER TABLE `buku`
 --
 ALTER TABLE `denda`
   ADD CONSTRAINT `fk_denda_peminjaman` FOREIGN KEY (`id_pinjam`) REFERENCES `peminjaman` (`id_pinjam`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

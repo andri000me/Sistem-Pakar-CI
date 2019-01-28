@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Siswa_model extends MY_Model
+class Jenis_NG_model extends MY_Model
 {
    protected $perPage = 10;
 

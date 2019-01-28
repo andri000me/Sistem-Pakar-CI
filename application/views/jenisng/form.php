@@ -14,7 +14,7 @@
             <?= form_label('Kode NG', 'kode_ng', ['class' => 'label']) ?>
         </div>
         <div class="col-4">
-            <?= form_input('kode_ng') ?>
+            <?= form_input(array('name'=>'kode_ng', 'value'=>$input->kd_NG, 'disabled'=>'true')) ?>
         </div>
         <div class="col-4">
             <?= form_error('kode_ng') ?>
@@ -27,7 +27,7 @@
             <?= form_label('Jenis NG', 'jenis_ng', ['class' => 'label']) ?>
         </div>
         <div class="col-4">
-            <?= form_input('jenis_ng') ?>
+            <?= form_input('jenis_ng', $input->jenis_NG) ?>
         </div>
         <div class="col-4">
             <?= form_error('jenis_ng') ?>
@@ -62,7 +62,7 @@
             <?= form_label('Definisi', 'definisi', ['class' => 'label']) ?>
         </div>
         <div class="col-4">
-            <?= form_input('definisi') ?>
+            <?= form_textarea(array('name'=>'definisi', 'value'=>$input->definisi)) ?>
         </div>
         <div class="col-4">
             <?= form_error('definisi') ?>
@@ -75,7 +75,7 @@
             <?= form_label('Solusi', 'solusi', ['class' => 'label']) ?>
         </div>
         <div class="col-4">
-            <?= form_input('solusi') ?>
+            <?= form_textarea(array('name'=>'solusi', 'value'=>$input->solusi)) ?>
         </div>
         <div class="col-4">
             <?= form_error('solusi') ?>
